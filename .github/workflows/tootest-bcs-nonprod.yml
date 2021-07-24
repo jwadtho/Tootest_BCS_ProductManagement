@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: [ '3.1.x' ]
+        dotnet-version: [ '5.0.x' ]
     steps:
       - uses: actions/checkout@v2
 
@@ -36,7 +36,7 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build Tootest.Bcs.ProductManagement.sln --configuration Release --no-restore
+        run: dotnet build Tootest_BCS_ProductManagement.sln --configuration Release --no-restore
 
   #     - name: Login to ACR EE with the AccessKey pair
   #       uses: aliyun/acr-login@v1
