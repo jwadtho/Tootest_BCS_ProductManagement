@@ -1,0 +1,12 @@
+.idea
+**/appsettings.local.json
+**/bin
+**/obj
+.DS_Store
+**/.DS_Store
+*.user
+
+.vs
+**/CodeCoverageReport
+**/CoverageResults
+**/TestResults

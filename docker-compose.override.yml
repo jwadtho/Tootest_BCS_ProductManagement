@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  tootest.bcs.productmanagement.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"

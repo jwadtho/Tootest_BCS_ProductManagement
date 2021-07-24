@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  tootest.bcs.productmanagement.api:
+    image: ${DOCKER_REGISTRY-}tootestbcsproductmanagement
+    build:
+      context: .
+      dockerfile: Tootest.Bcs.ProductManagement.Api/Dockerfile

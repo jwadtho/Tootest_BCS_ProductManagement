@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.810.6
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tootest.Bcs.ProductManagement.Api", "Tootest.Bcs.ProductManagement.Api\Tootest.Bcs.ProductManagement.Api.csproj", "{73A063BF-E40E-414C-9F34-AA69D9EE1928}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{73A063BF-E40E-414C-9F34-AA69D9EE1928}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73A063BF-E40E-414C-9F34-AA69D9EE1928}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73A063BF-E40E-414C-9F34-AA69D9EE1928}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73A063BF-E40E-414C-9F34-AA69D9EE1928}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {59430ED6-9D6A-4B26-B260-10EEBF7A72B7}
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
+		$0.VersionControlPolicy = $2
+	EndGlobalSection
+EndGlobal
