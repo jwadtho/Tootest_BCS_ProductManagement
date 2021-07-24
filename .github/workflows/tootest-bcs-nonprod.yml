@@ -1,0 +1,126 @@
+name: Build And Deploy To Dev
+on:
+  workflow_dispatch:
+    inputs:
+    logLevel:
+      description: 'Log level'
+      required: true
+      default: 'warning'
+  push:
+    branches:
+      - main
+
+env:
+  REGION_ID: cn-shanghai
+  ACR_EE_REGISTRY: xom-ecomm-acr02-registry.cn-shanghai.cr.aliyuncs.com
+  ACR_EE_INSTANCE_ID: cri-3fynibeigjxpi5o6
+  ACR_EE_NAMESPACE: toottest
+  ACR_EE_IMAGE: bcs-product
+
+jobs:
+  deploy:
+    name: Build And Deploy To Dev
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '3.1.x' ]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build Tootest.Bcs.ProductManagement.sln --configuration Release --no-restore
+
+  #     - name: Login to ACR EE with the AccessKey pair
+  #       uses: aliyun/acr-login@v1
+  #       with:
+  #         login-server: "https://${{ env.ACR_EE_REGISTRY }}"
+  #         region-id: "${{ env.REGION_ID }}"
+  #         access-key-id: "${{ secrets.ALICLOUD_ACCESS_KEY }}"
+  #         access-key-secret: "${{ secrets.ALICLOUD_SECRET_KEY }}"
+  #         instance-id: "${{ env.ACR_EE_INSTANCE_ID }}"
+
+  #     - name: Generate secret from docker config
+  #       run: |
+  #         BASE64=$(cat ${{ env.DOCKER_CONFIG }}/config.json | base64 -w 0)
+  #         sed -i "s/BASE64_CREDENTIAL/$BASE64/g" ./kubernetes/pullImageSecret.yml
+
+  #     - name: Get github sha
+  #       run: |
+  #         GITHUB_SHA=$(git rev-parse HEAD)
+  #         sed -i "s/GITHUB_SHA/$GITHUB_SHA/g" ./kubernetes/deploy.yml
+
+  #     - name: Build and Push to ACR
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         context: .
+  #         push: true
+  #         tags: "${{ env.ACR_EE_REGISTRY }}/${{ env.ACR_EE_NAMESPACE }}/${{ env.ACR_EE_IMAGE }}:${{ github.sha }}"
+
+  #     - name: Setting context for Kubernetes cluster of Alibaba Cloud Kubernetes Service (ACK)
+  #       uses: aliyun/ack-set-context@v1
+  #       with:
+  #         access-key-id: ${{ secrets.ALICLOUD_ACCESS_KEY }}
+  #         access-key-secret: ${{ secrets.ALICLOUD_SECRET_KEY }}
+  #         cluster-id: ${{ secrets.NON_PROD_ACK_CLUSTER_ID }}
+
+  #     - name: Apply YAML to xom-bcs-dev
+  #       run: |
+  #         cp kubernetes/pullImageSecret.yml kubernetes/pullImageSecret_dev.yml
+  #         cp kubernetes/deploy.yml kubernetes/deploy_dev.yml
+  #         cp kubernetes/service.yml kubernetes/service_dev.yml
+  #         sed -i "s/NAMESPACE_VAR/xom-bcs-dev/g" kubernetes/pullImageSecret_dev.yml kubernetes/deploy_dev.yml kubernetes/service_dev.yml
+  #         sed -i "s/NAMESPACE_SHORT_VAR/dev/g" kubernetes/deploy_dev.yml
+  #         kubectl apply -R -f kubernetes/pullImageSecret_dev.yml -f kubernetes/deploy_dev.yml -f kubernetes/service_dev.yml
+
+  #     - name: Wait for Deploy
+  #       run: |
+  #         kubectl rollout status -f kubernetes/deploy_dev.yml
+
+  #     - name: Failed run
+  #       if: ${{ failure() }}
+  #       run: |
+  #         kubectl rollout undo -f kubernetes/deploy_dev.yml
+
+  # erebor:
+  #       env:
+  #           PROJECT_PATH: ./Xom.Bcs.ProductManagement.Api/Xom.Bcs.ProductManagement.Api.csproj
+  #       name: Erebor scan
+  #       runs-on: ubuntu-latest
+  #       steps:
+  #         - name: Checkout
+  #           uses: actions/checkout@v2
+
+  #         - uses: actions/checkout@v2
+  #           name: "Checkout Erebor actions"
+  #           with:
+  #             repository: ExxonMobil/actions-erebor
+  #             token: ${{ secrets.XOM_TOKEN_INTERNAL_REPO }}
+  #             ref: "v1"
+  #             path: ./actions-erebor
+
+  #         - name: Run Erebor
+  #           id: erebor
+  #           uses: ./actions-erebor
+  #           with:
+  #             client-id: ${{ secrets.PRODUCT_CLIENT_ID }}
+  #             client-secret: ${{ secrets.PRODUCT_CLIENT_SECRET }}
+  #             language: C#
+  #             path: ${{ env.PROJECT_PATH }}
+  #             verbose-mode: true
+
+  #         - name: Check output
+  #           shell: bash
+  #           run: |
+  #             if [ '${{ steps.erebor.outputs.passed }}' != 'true' ]; then 
+  #                 echo "::error::One or more finding(s) found by Erebor scan"
+  #                 cat erebor_result.json | json_pp
+  #                 exit 1
+  #             fi
