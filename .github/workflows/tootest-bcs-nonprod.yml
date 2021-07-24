@@ -14,7 +14,7 @@ env:
   REGION_ID: cn-shanghai
   ACR_EE_REGISTRY: xom-ecomm-acr02-registry.cn-shanghai.cr.aliyuncs.com
   ACR_EE_INSTANCE_ID: cri-3fynibeigjxpi5o6
-  ACR_EE_NAMESPACE: toottest
+  ACR_EE_NAMESPACE: tootest
   ACR_EE_IMAGE: bcs-product
 
 jobs:
@@ -36,7 +36,7 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build Tootest_BCS_ProductManagement --configuration Release --no-restore
+        run: dotnet build Tootest_BCS_ProductManagement.sln --configuration Release --no-restore
 
       - name: Login to ACR EE with the AccessKey pair
         uses: aliyun/acr-login@v1
